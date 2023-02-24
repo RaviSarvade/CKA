@@ -4,10 +4,10 @@ Master_Nodes: Manage, Plan , Schedule & Monitor nodes.
 uses set of components called control plane components to perform the above actions
 1)ETCD Cluster - its a DB stores data in a Key-Value format
 
-2)kube-scheduler - it schedules the pod to a available nodes. checks other policies, taints and tolerations
+2)kube-scheduler - it schedules the pod to a available nodes based on certain criteria i,e, checks other policies, taints and tolerations etc.,
 
 3)controller-Manager:
-a)Node-controller: responsible for onboarding new nodes or take cares when nodes is down 
+a)Node-controller: responsible for onboarding new nodes or take cares necessary action when nodes is down to keep app available 
 b)Replication-controller: checks desired number of containers or running in a replication group
 
 4)kube-apiserver: primary management component responsible for orchestrating all operations in cluster & expose kubernetes API which is used by external users to perform management operations
@@ -53,6 +53,77 @@ Root directory is called "Registry"
 under this it contains minions,pods,relicasets,deployments,roles,secrets
 
 ETCD in HA Environment: it contains multiple master nodes in which ETCD instance was spread across and make sure to update other etcd instance details in etcd.service in --initial-cluster
+
+================================================================================================================================================================================================================
+
+Kube-APiserver:
+
+when you run kubectl command it will reach to kube-apiserver and it first authenticates the request and it interacts with ETCDcluster and retrieves data in the response
+its the only component interacts directly with ETCD datastore
+-kubecontroller & scheduler uses API server to perform  updates in the cluster in their respective areas
+#kubectl get nodes --> kube-api server perform below 3 actions to display output
+1) Authenticates User
+2) Validate Request
+3) Retrive data from ETCD
+
+4) update ETCD
+5) scheduler
+6) kubelet
+
+Lifecycle of POD creation
+- initially API server creates a Pod object without asssigning to any node & updates in ETCD and updates user that POD is created
+- kube-scheduler continuously monitors API server & identifies new pod without any assigned node. so it assigns a right node & communicates back to kubeapi server & it updates in ETCD 
+- kube-apiserver passes info to kubelet in the appropriate worker nodes. kubelet creates pod on the node & instructs CRE to deploy app image
+- kubelet updates to kube-apiserver & it updates back to ETCD cluster
+
+Note: above similar pattern is followed if any changes need to be done at k8s cluster level
+
+===================================================================================================================================================================================================================
+
+Kube Controller Manager:
+
+- process that continuously monitor desired state & actuals state of the pods
+
+3) kube-controller-Manager: it contains Multiple controllers
+a)Node-controller: responsible for onboarding new nodes or take cares necessary action when nodes is down to keep app available 
+it monitors through kube-apiserver. 
+Nodemonitorperiod= every 5sec
+NodeMonitorGraceperiod= 40 sec
+PodEvictionTimeout= 5 min
+if it reaches grace period of 40 sec continuous offline then Node will be marked as Unreachable & it will wait for 5 min to get the node back online.
+if node is still offline pods will assign to healthy nodes if pods are part of replica sets
+
+b)Replication-controller: responsible for monitoring status of replica sets
+checks desired number of pods or running in a set
+
+4) kube-scheduler: it only decides the appropriate/best nodes for the pod  based on certain criteria but assigning pod to the node will be taken care by kubelet
+
+Lets assume you want to assign a pod of container contains CPU req - 10 then scheduler perform below actions
+
+1) filter nodes --> req - CPU > 10
+2) Rank nodes --> it uses a priority function to rank a node on scale of 0 to 10
+scheduler calculates amount of available resources after placing pod on the nodes i.e, which is having high available resoucres contains more priority
+so it schedules pod on hight priority node
+
+Note: you can write your own scheduler as well.
+
+====================================================================================================================================================================================================
+
+
+Kubelet: its a agent which is present in every worker node.
+- registers node with kubernets cluster when it receives a request it informs CRE to create a POD by pulling image.
+- continuously monitor the containers / pods and reports it to kubeapiserver
+
+kube-proxy:
+pod network - its a internal virtual network that spans across all nodes in which all pods are connected.
+
+
+
+
+
+
+
+
 
 
 
