@@ -1,0 +1,58 @@
+K8s_Architecture:
+Master_Nodes: Manage, Plan , Schedule & Monitor nodes.
+
+uses set of components called control plane components to perform the above actions
+1)ETCD Cluster - its a DB stores data in a Key-Value format
+
+2)kube-scheduler - it schedules the pod to a available nodes. checks other policies, taints and tolerations
+
+3)controller-Manager:
+a)Node-controller: responsible for onboarding new nodes or take cares when nodes is down 
+b)Replication-controller: checks desired number of containers or running in a replication group
+
+4)kube-apiserver: primary management component responsible for orchestrating all operations in cluster & expose kubernetes API which is used by external users to perform management operations
+Monitors state of the cluster & by the worker nodes to communicate with the server
+
+
+Worker_Nodes: Host Application as Containers.
+components:
+kubelet - agent which runs on each node in the cluster. it deploys and destoys pods as required
+kubeapiserver periodically takes info to monitor nodes and containers on them
+Kube-proxy: enables communication b/w worker nodes ,Service ensures necessary rules are placed taht allow the containers running on them to reach each other within the cluster
+CRE -- Docker  - it should be installed on worker nodes
+and master as well if you want control plane components as containers
+
+================================================================================================================================================================================================
+Control plane components:
+
+ETCD:distributed reliable key-value store which is simple, secure & Fast
+
+ETCD service listens on port 2379 by default and the client by default will be there i.e, etcdctl -- its a CLI client to store & retrieve key value pair
+
+#./etcdctl --version  --> shows etcdctl utility & API versions
+
+output: in current state etcdctl configured to work with API v2
+etcdctl version: 3.3.11
+API version: 2
+
+#./etcdctl
+
+output: shows command which runs on API v2
+
+To change etcdctl to work with API version 3
+#export ETCD_API=3
+
+ETCD in kubernetes:it stores info about cluster such as Nodes,PODS,Configs,Secrets,Accounts,Roles, Bindings & others
+
+Setup - Kubeadm
+-- ETCD will be configured as etcd-master POD in kube-system ns
+#kubectl exec etcd-master -n kube-system etcdctl get / --prefix -keys-only --> it displays data of keys
+
+Kubernetes stores data in specific directory structure
+Root directory is called "Registry"
+under this it contains minions,pods,relicasets,deployments,roles,secrets
+
+ETCD in HA Environment: it contains multiple master nodes in which ETCD instance was spread across and make sure to update other etcd instance details in etcd.service in --initial-cluster
+
+
+
