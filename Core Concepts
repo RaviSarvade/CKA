@@ -71,6 +71,7 @@ its the only component interacts directly with ETCD datastore
 6) kubelet
 
 Lifecycle of POD creation
+
 - initially API server creates a Pod object without asssigning to any node & updates in ETCD and updates user that POD is created
 - kube-scheduler continuously monitors API server & identifies new pod without any assigned node. so it assigns a right node & communicates back to kubeapi server & it updates in ETCD 
 - kube-apiserver passes info to kubelet in the appropriate worker nodes. kubelet creates pod on the node & instructs CRE to deploy app image
@@ -114,16 +115,30 @@ Kubelet: its a agent which is present in every worker node.
 - registers node with kubernets cluster when it receives a request it informs CRE to create a POD by pulling image.
 - continuously monitor the containers / pods and reports it to kubeapiserver
 
-kube-proxy:
-pod network - its a internal virtual network that spans across all nodes in which all pods are connected.
+kube-proxy: process that runs on each node in cluster. 
+its job is to look for new services & for every newly created service kube proxy creates appropriate rules on each node to forward traffic to those services to the backend pod
+- one way is using IPtables rule
 
+pod network - its a internal virtual network that spans across all nodes in cluster in which all pods are connected.
 
+Node1 contains webapp1 pod
+Node2 conatins DBapp1 pod (create a service to expose DB app)
 
+Webapp1 access DB1 uses service instead of IP as if DB goes down IP will not be reachable but using service we can reach DB in the cluster
+- service also gets an IP addr assigned to it
+- when ever a pod reaches a service using servicename or service IP it transfers traffic to backend pod
+- service is an virtual component lives only in k8s memory
 
+==============================================================================================================================================================================================================================
+Kubernetes objects:
 
+PODS: containers are encapsulated into a kubernetes object known as Pods 
+- single instance of an application.
+- it can contains multiple containers
+- two containers share similar network space in a pod so they can communicate with each other as referring to each other as host.
 
-
-
+#kubectl run nginx --image=nginx
+#kubectl get pods
 
 
 
