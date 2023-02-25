@@ -142,6 +142,8 @@ PODS: containers are encapsulated into a kubernetes object known as Pods
 #kubectl run nginx --image=nginx
 #kubectl get pods
 
+
+
  
 YAML in k8s:
 =======================================================================================================================================================
@@ -158,5 +160,24 @@ spec: --> Dictionary
       
  #kubectl create -f po-definition.yml
  #kubectl describe pod myapp-pod
+============================================================================================================================================================
+
+Replication-controller: checks desired number of pods are running in a replication group, if pod is failed it will create new pods according to the total count of replicas
+Replicaset - its the newer version of Replication controller
+
+Labels and Selectors:
+
+Labels are the Key-value pair assigned to the pod
+
+Selctors are used to identify the pods based on matched Labels & uses as filters for replicasets 
+
+Scale up the PODS using below CMD
+#kubectl replace -f rs.yml
+#kubectl scale --replicas=6 -f rs.yml
+#kubectl scale --replicas=6 replicaset myapp-replicaset
+#kubectl get replicaset
+#kubectl delete replicaset myapp-replicaset
+
+
 
 
