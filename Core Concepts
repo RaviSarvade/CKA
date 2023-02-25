@@ -18,7 +18,7 @@ Worker_Nodes: Host Application as Containers.
 components:
 kubelet - agent which runs on each node in the cluster. it deploys and destoys pods as required
 kubeapiserver periodically takes info to monitor nodes and containers on them
-Kube-proxy: enables communication b/w worker nodes ,Service ensures necessary rules are placed taht allow the containers running on them to reach each other within the cluster
+Kube-proxy: enables communication b/w worker nodes ,Service ensures necessary rules are placed that allow the containers running on them to reach each other within the cluster
 CRE -- Docker  - it should be installed on worker nodes
 and master as well if you want control plane components as containers
 
@@ -58,7 +58,7 @@ ETCD in HA Environment: it contains multiple master nodes in which ETCD instance
 
 Kube-APiserver:
 
-when you run kubectl command it will reach to kube-apiserver and it first authenticates the request and it interacts with ETCDcluster and retrieves data in the response
+when you run kubectl command it will reach to kube-apiserver and it first authenticates user & validates the request and it interacts with ETCDcluster and retrieves data in the response
 its the only component interacts directly with ETCD datastore
 -kubecontroller & scheduler uses API server to perform  updates in the cluster in their respective areas
 #kubectl get nodes --> kube-api server perform below 3 actions to display output
@@ -88,9 +88,11 @@ Kube Controller Manager:
 3) kube-controller-Manager: it contains Multiple controllers
 a)Node-controller: responsible for onboarding new nodes or take cares necessary action when nodes is down to keep app available 
 it monitors through kube-apiserver. 
+
 Nodemonitorperiod= every 5sec
 NodeMonitorGraceperiod= 40 sec
 PodEvictionTimeout= 5 min
+
 if it reaches grace period of 40 sec continuous offline then Node will be marked as Unreachable & it will wait for 5 min to get the node back online.
 if node is still offline pods will assign to healthy nodes if pods are part of replica sets
 
