@@ -142,5 +142,21 @@ PODS: containers are encapsulated into a kubernetes object known as Pods
 #kubectl run nginx --image=nginx
 #kubectl get pods
 
+ 
+YAML in k8s:
+=======================================================================================================================================================
+apiVersion: v1 --> string #version of kubernetes API we are using to create object
+kind: Pod --> String 
+metadata: --> Dictionary
+  name: myapp-pod
+  labels:
+    app: myapp
+spec: --> Dictionary
+  containers: --> List/Array # pods can have multiple containers
+    - name: nginx-container --> "-" indicates first item in the list
+      image: nginx
+      
+ #kubectl create -f po-definition.yml
+ #kubectl describe pod myapp-pod
 
 
