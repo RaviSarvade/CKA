@@ -1,0 +1,162 @@
+K8s_Architecture:
+Master_Nodes: Manage, Plan , Schedule & Monitor nodes.
+
+uses set of components called control plane components to perform the above actions
+1)ETCD Cluster - its a DB stores data in a Key-Value format
+
+2)kube-scheduler - it schedules the pod to a available nodes based on certain criteria i,e, checks other policies, taints and tolerations etc.,
+
+3)controller-Manager:
+a)Node-controller: responsible for onboarding new nodes or take cares necessary action when nodes is down to keep app available 
+b)Replication-controller: checks desired number of containers or running in a replication group
+
+4)kube-apiserver: primary management component responsible for orchestrating all operations in cluster & expose kubernetes API which is used by external users to perform management operations
+Monitors state of the cluster & by the worker nodes to communicate with the server
+
+
+Worker_Nodes: Host Application as Containers.
+components:
+kubelet - agent which runs on each node in the cluster. it deploys and destoys pods as required
+kubeapiserver periodically takes info to monitor nodes and containers on them
+Kube-proxy: enables communication b/w worker nodes ,Service ensures necessary rules are placed that allow the containers running on them to reach each other within the cluster
+CRE -- Docker  - it should be installed on worker nodes
+and master as well if you want control plane components as containers
+
+================================================================================================================================================================================================
+Control plane components:
+
+ETCD:distributed reliable key-value store which is simple, secure & Fast
+
+ETCD service listens on port 2379 by default and the client by default will be there i.e, etcdctl -- its a CLI client to store & retrieve key value pair
+
+#./etcdctl --version  --> shows etcdctl utility & API versions
+
+output: in current state etcdctl configured to work with API v2
+etcdctl version: 3.3.11
+API version: 2
+
+#./etcdctl
+
+output: shows command which runs on API v2
+
+To change etcdctl to work with API version 3
+#export ETCD_API=3
+
+ETCD in kubernetes:it stores info about cluster such as Nodes,PODS,Configs,Secrets,Accounts,Roles, Bindings & others
+
+Setup - Kubeadm
+-- ETCD will be configured as etcd-master POD in kube-system ns
+#kubectl exec etcd-master -n kube-system etcdctl get / --prefix -keys-only --> it displays data of keys
+
+Kubernetes stores data in specific directory structure
+Root directory is called "Registry"
+under this it contains minions,pods,relicasets,deployments,roles,secrets
+
+ETCD in HA Environment: it contains multiple master nodes in which ETCD instance was spread across and make sure to update other etcd instance details in etcd.service in --initial-cluster
+
+================================================================================================================================================================================================================
+
+Kube-APiserver:
+
+when you run kubectl command it will reach to kube-apiserver and it first authenticates user & validates the request and it interacts with ETCDcluster and retrieves data in the response
+its the only component interacts directly with ETCD datastore
+-kubecontroller & scheduler uses API server to perform  updates in the cluster in their respective areas
+#kubectl get nodes --> kube-api server perform below 3 actions to display output
+1) Authenticates User
+2) Validate Request
+3) Retrive data from ETCD
+
+4) update ETCD
+5) scheduler
+6) kubelet
+
+Lifecycle of POD creation
+
+- initially API server creates a Pod object without asssigning to any node & updates in ETCD and updates user that POD is created
+- kube-scheduler continuously monitors API server & identifies new pod without any assigned node. so it assigns a right node & communicates back to kubeapi server & it updates in ETCD 
+- kube-apiserver passes info to kubelet in the appropriate worker nodes. kubelet creates pod on the node & instructs CRE to deploy app image
+- kubelet updates to kube-apiserver & it updates back to ETCD cluster
+
+Note: above similar pattern is followed if any changes need to be done at k8s cluster level
+
+===================================================================================================================================================================================================================
+
+Kube Controller Manager:
+
+- process that continuously monitor desired state & actuals state of the pods
+
+3) kube-controller-Manager: it contains Multiple controllers
+a)Node-controller: responsible for onboarding new nodes or take cares necessary action when nodes is down to keep app available 
+it monitors through kube-apiserver. 
+
+Nodemonitorperiod= every 5sec
+NodeMonitorGraceperiod= 40 sec
+PodEvictionTimeout= 5 min
+
+if it reaches grace period of 40 sec continuous offline then Node will be marked as Unreachable & it will wait for 5 min to get the node back online.
+if node is still offline pods will assign to healthy nodes if pods are part of replica sets
+
+b)Replication-controller: responsible for monitoring status of replica sets
+checks desired number of pods or running in a set
+
+4) kube-scheduler: it only decides the appropriate/best nodes for the pod  based on certain criteria but assigning pod to the node will be taken care by kubelet
+
+Lets assume you want to assign a pod of container contains CPU req - 10 then scheduler perform below actions
+
+1) filter nodes --> req - CPU > 10
+2) Rank nodes --> it uses a priority function to rank a node on scale of 0 to 10
+scheduler calculates amount of available resources after placing pod on the nodes i.e, which is having high available resoucres contains more priority
+so it schedules pod on hight priority node
+
+Note: you can write your own scheduler as well.
+
+====================================================================================================================================================================================================
+
+
+Kubelet: its a agent which is present in every worker node.
+- registers node with kubernets cluster when it receives a request it informs CRE to create a POD by pulling image.
+- continuously monitor the containers / pods and reports it to kubeapiserver
+
+kube-proxy: process that runs on each node in cluster. 
+its job is to look for new services & for every newly created service kube proxy creates appropriate rules on each node to forward traffic to those services to the backend pod
+- one way is using IPtables rule
+
+pod network - its a internal virtual network that spans across all nodes in cluster in which all pods are connected.
+
+Node1 contains webapp1 pod
+Node2 conatins DBapp1 pod (create a service to expose DB app)
+
+Webapp1 access DB1 uses service instead of IP as if DB goes down IP will not be reachable but using service we can reach DB in the cluster
+- service also gets an IP addr assigned to it
+- when ever a pod reaches a service using servicename or service IP it transfers traffic to backend pod
+- service is an virtual component lives only in k8s memory
+
+==============================================================================================================================================================================================================================
+Kubernetes objects:
+
+PODS: containers are encapsulated into a kubernetes object known as Pods 
+- single instance of an application.
+- it can contains multiple containers
+- two containers share similar network space in a pod so they can communicate with each other as referring to each other as host.
+
+#kubectl run nginx --image=nginx
+#kubectl get pods
+
+ 
+YAML in k8s:
+=======================================================================================================================================================
+apiVersion: v1 --> string #version of kubernetes API we are using to create object
+kind: Pod --> String 
+metadata: --> Dictionary
+  name: myapp-pod
+  labels:
+    app: myapp
+spec: --> Dictionary
+  containers: --> List/Array # pods can have multiple containers
+    - name: nginx-container --> "-" indicates first item in the list
+      image: nginx
+      
+ #kubectl create -f po-definition.yml
+ #kubectl describe pod myapp-pod
+
+
