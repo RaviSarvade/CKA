@@ -29,7 +29,10 @@ metadata.annotations
 
 Taints & Tolerations: it wont deals with security and intrusions
 
-it discuss about pod to Node relations
+Taint ise set on master node that prevents pod to be scheduled on this node
+it will only restricts  nodes from accepting certain pods
+if you req is restrict a pod on certain nodes it can be acheived with Node affinity
+it doesnt tell pods to go to specific nodes instead it tells to  nodes that to accept pods with  certain tolerations
 
 are used to set restrictions on what pod to be scheduled to a node
 
@@ -40,7 +43,16 @@ Taint-Node
 #kubectl taint nodes node-name key=value:taint-effect
 
 we have three taint-effects i.e, what happens to pods that do not tolerate to taints
-NoSchedule | PreferNoSchedule | NoExecute
+NoSchedule - pods will not be schedule on NOdes
+PreferNoSchedule - system will try to avoid plcaing pod on a node but thats not guaranteed
+NoExecute - new pods will not be scheduled on the node and existing pods will be evicted (pod will be kiled) if pods dont tolerate the taint
+
+Tolerations - PODs
+
+its mentioned in spec.tolerations in key: "value" format and value should encode with double quotes
+
+when the pods are created/updated with new tolerations they are either not scheduled on the nodes or evicted from the existing nodes 
+
 
 
 
