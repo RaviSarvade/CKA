@@ -178,6 +178,52 @@ Scale up the PODS using below CMD
 #kubectl get replicaset
 #kubectl delete replicaset myapp-replicaset
 
+==============================================================================================================================================================================
+
+When you upgrade your instances you will do it one by one in Rolling updates & can rollback the changes
+
+Deployments: its a K8s object where we can upgrade changes
+
+
+Create an NGINX Pod
+
+#kubectl run nginx --image=nginx
+
+Generate POD Manifest YAML file (-o yaml). Don't create it(--dry-run)
+
+#kubectl run nginx --image=nginx --dry-run=client -o yaml
+
+Create a deployment
+
+kubectl create deployment --image=nginx nginx
+
+Generate Deployment YAML file (-o yaml). Don't create it(--dry-run)
+
+#kubectl create deployment --image=nginx nginx --dry-run=client -o yaml
+
+Generate Deployment YAML file (-o yaml). Don't create it(--dry-run) with 4 Replicas (--replicas=4)
+
+#kubectl create deployment --image=nginx nginx --dry-run=client -o yaml > nginx-deployment.yaml
+
+Save it to a file, make necessary changes to the file (for example, adding more replicas) and then create the deployment.
+
+#kubectl create -f nginx-deployment.yaml
+
+OR
+
+In k8s version 1.19+, we can specify the --replicas option to create a deployment with 4 replicas.
+
+#kubectl create deployment --image=nginx nginx --replicas=4 --dry-run=client -o yaml > nginx-deployment.yaml
+
+Kubernetes Service: 
+a)ClusterIP - its a internal service & creates virtual IP in the cluster to enable communication between frontend and backend pod groups
+b)NodePort: it will be in a valid range 30000-32767
+C)LoadBalancer
+enables loose coupling b/w microservices in or out of app
+It enables communication between various components in & outside of the application.
+
+Lets assume App contains fromtend group for serving load to users & another group for serving backend processes and third group connecting  to an ext datastore
+
 
 
 
