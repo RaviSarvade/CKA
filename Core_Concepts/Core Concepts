@@ -178,6 +178,12 @@ Scale up the PODS using below CMD
 #kubectl get replicaset
 #kubectl delete replicaset myapp-replicaset
 
+==============================================================================================================================================================================
+
+When you upgrade your instances you will do it one by one in Rolling updates & can rollback the changes
+
+Deployments: its a K8s object where we can upgrade changes
+
 
 
 
