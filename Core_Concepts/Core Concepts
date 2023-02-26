@@ -238,4 +238,17 @@ mysql.connect("
 db-service.dev.svc.cluster.local")
 svc-name  . ns .svc.    domain
 
+to create a namespace
+#kubectl create namespace dev
+
+to get pods in dev namespace
+#ku get po --namespace=dev
+
+switch to dev namespace
+#kubectl config set-context $(kubectl config current-context) --namespace=dev
+
+context are used to manage multiple clusters and multiple environments
+
+To limit resources in a namespace create a ResourceQuota
+
 
