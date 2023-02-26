@@ -1,0 +1,12 @@
+Scheduling in kubernetes:
+
+Manual Scheduling: 
+
+Generally Scheduler will check for spec.nodeName in the pod definition file if its not present then it will schedule the pod in appropriate node
+or we can manually mention the node details in nodeName field
+
+- if scheduler is not present then Pod status will be in Pending state or you can manually assign pod to the nodes
+- at the time of pod creation you can mention nodename property in pod.yml in spec.nodeName
+- for existing pod whose status is pending beacuse it is wating for teh node to assign then you have to create a binding object yml and then send post request binding API
+with binding data in json format
+- you cant edit the nodeName of a pod in live environment
