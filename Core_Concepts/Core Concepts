@@ -216,14 +216,14 @@ In k8s version 1.19+, we can specify the --replicas option to create a deploymen
 #kubectl create deployment --image=nginx nginx --replicas=4 --dry-run=client -o yaml > nginx-deployment.yaml
 
 Kubernetes Service: 
-a)ClusterIP - its a internal service & creates virtual IP in the cluster to enable communication between frontend and backend pod groups
-b)NodePort: it will be in a valid range 30000-32767
+a)ClusterIP - its a internal service & creates virtual IP in the cluster to enable communication between frontend and backend pod groups in the cluster
+
+b)NodePort: it will be in a valid range 30000-32767, used for external users to access the app. generally it will be used for testing purpose and in production we wont utilize this service
 C)LoadBalancer
 enables loose coupling b/w microservices in or out of app
 It enables communication between various components in & outside of the application.
 
 Lets assume App contains fromtend group for serving load to users & another group for serving backend processes and third group connecting  to an ext datastore
 
-
-
+Services can transfer traffic onlyif endpoints are created & it acts as a inbuilt loadbalancer to distribute traffic
 
