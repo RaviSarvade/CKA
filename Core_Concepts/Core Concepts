@@ -258,4 +258,23 @@ context are used to manage multiple clusters and multiple environments
 
 To limit resources in a namespace create a ResourceQuota
 
+Whenever a k8s object was created status field will be updated --> live config of a k8s cluster 
+
+after initiating cmd ku create -f pod.yml for creating pod
+1) Yaml file will be converted into JSON called as last applied configuration
+2) creates a pod
+
+After changing image tag & updating cmd ku apply -f pod.yml
+live configuration ws updated with new image and after last applied configuration will be updated
+
+if a label was deleted in local yml file and we initatie kubectl apply cmd
+1) Last applied config had a label --> this means label should be removed in live config 
+
+2) if a label was present in live config and not presnt in local or last applied config then it will be left as it is
+
+3) if a field is missing from local file & it is present in last applied config
+
+
+
+
 
