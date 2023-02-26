@@ -10,3 +10,39 @@ or we can manually mention the node details in nodeName field
 - for existing pod whose status is pending beacuse it is wating for teh node to assign then you have to create a binding object yml and then send post request binding API
 with binding data in json format
 - you cant edit the nodeName of a pod in live environment
+
+Labels and Selectors: --> used for grouping and filtering the objects
+---------------------
+
+Labels - are properties attached to each item
+selectors - used to filter these item
+
+#ku get po --selector app=app1
+
+in order to connect replica sets to pod we can config selector field
+
+a single label can do if it matches correctly
+if you specify multiple labels then pod will be assigned to replicasets consisting of those multiple labels
+
+Annotations: used to record othe details of info pupose - tool , build, contact,e mail details
+metadata.annotations
+
+Taints & Tolerations: it wont deals with security and intrusions
+
+it discuss about pod to Node relations
+
+are used to set restrictions on what pod to be scheduled to a node
+
+taints are set on nodes and tolerations are set to pods
+
+Taint-Node
+
+#kubectl taint nodes node-name key=value:taint-effect
+
+we have three taint-effects i.e, what happens to pods that do not tolerate to taints
+NoSchedule | PreferNoSchedule | NoExecute
+
+
+
+
+
