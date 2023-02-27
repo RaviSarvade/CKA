@@ -81,7 +81,7 @@ Operator:
 a)Equal --> check both key and value pair to exist
 b)Exists --> checks only key to exist and it doesnt check teh value
 C)In --> it will check for any one of value 
-d) NotIn --> it wont accept the value 
+d) NotIn --> it wont accept  any of the value 
 
 
 If podAffinity doesnot match the given expression with Label called size or 
@@ -98,4 +98,22 @@ b)prefferedDuringSchedulingIgnoredDuringExecution
 
 Planned:
 a)requiredDuringSchedulingrequiredDuringExecution
+
+There are two states in pod lifecycle when considering NodeAffinity
+
+a)During Scheduling - pod doesnot exist and created for the first time. SO, Affinity rules are considered to place pods in right nodes
+
+b)DuringExecution- pod has been running and change made in env affects node affinity
+
+If podAffinity doesnot match the given expression with Label called size on Nodes then it depends on the Node Affinity Type property
+
+During Scheuling is required --> pod will not be scheduled
+During Scheduling is Preferred --> Pod will try to place on node with matching node affinity rules & if not present then it will  ignore Node Affinity and place on any available node
+
+if pods are scheduled on a node and what if someone changes the Label on the Node
+
+During execution is ignored--> Pod will be running in the same node, any changes in NodeAffinity wil not impace them once schedule them
+
+During execution is Required --> which will evict the pod on the node that dont have matching affinity rules
+
 
