@@ -163,3 +163,30 @@ spec:
     type: Container
     
     ================================================================================================================================================================
+
+
+Daemon sets:
+-------------
+its like replicasets and helps to deploy multiple instances of pod but it runs each copy of your pod in every node
+
+whenever a new node was added to the cluster a replica of tehat pod will be added and when node is removed pod will be removed
+
+At any point of time one copy of pod should present in daemonsets
+
+
+Usecases:
+---------
+
+Deploy a monitoring agent or log collector on each node of your cluster to monitor better then daemonset will deploy monitoring agent in the form of pod in all nodes of cluster
+
+how it schedules pod on each node
+it uses nodeName field to place pod on each node in a cluster. until k8s v1.12
+
+from v1.2 uses Node Affinity & Default Scheduler
+
+
+
+
+
+
+
