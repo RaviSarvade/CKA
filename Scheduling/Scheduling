@@ -116,4 +116,7 @@ During execution is ignored--> Pod will be running in the same node, any changes
 
 During execution is Required --> which will evict the pod on the node that dont have matching affinity rules
 
+In Taints & Tolerations there is chance that the desired pod might placed in another node
+in Node affinity another set of pods might get  placed in our desired Nodes
+So , we use combination of both to ensure specifc pod is placed in specific node
 
