@@ -28,7 +28,7 @@ Annotations: used to record othe details of info pupose - tool , build, contact,
 metadata.annotations
 
 Taints & Tolerations: it wont deals with security and intrusions
-
+---------------------
 Taint ise set on master node that prevents pod to be scheduled on this node
 it will only restricts  nodes from accepting certain pods
 if you req is restrict a pod on certain nodes it can be acheived with Node affinity
@@ -50,11 +50,52 @@ NoExecute - new pods will not be scheduled on the node and existing pods will be
 Tolerations - PODs
 
 its mentioned in spec.tolerations in key: "value" format and value should encode with double quotes
-
+Key,operator,value(Equal),effect fields shoold be updated in spec.tolerations
 when the pods are created/updated with new tolerations they are either not scheduled on the nodes or evicted from the existing nodes 
+=====================================================================================================================================================================================================
+
+NodeSelectors:
+--------------
+We can set limitation of a pod so that it will be assigned to particular nodes.
+
+in pod def file add spec.nodeSelector with size: Large
+
+before proceeding with above step assign key-value pair size: Large to a node so that pod will be placed on this node with matching Labels
+
+To Label a node:
+#kubectl label nodes node_name key=value
+Nodeselectors served our purpose but still it has limitations, we used a single label to achieve our goal but 
+if req is complex 
+i.e Size should be
+Large or Medium
+but not small
+We cant provide advances expressions like ARE or NOT using NodeSelectors for the above requirement
+then we use Node AFfinity & Anti Affinity feature
+========================================================================================================================================================
+
+NodeAffinity: main feature is ensuring pods are hosted on particular nodes 
+
+uses advanced capability to limit pod placement on specific nodes
+
+Operator:
+a)Equal --> check both key and value pair to exist
+b)Exists --> checks only key to exist and it doesnt check teh value
+C)In --> it will check for any one of value 
+d) NotIn --> it wont accept the value 
 
 
+If podAffinity doesnot match the given expression with Label called size or 
+if pods are scheduled on a node and what if someone changes the Label on the Node
 
+so, it depends on the Node Affinity Type property
 
+the type of Node affinity defines the behaviour of the scheduler wrt to Node Affinity & stages in LIfecycle of a pod
 
+TwoTypes:
+Available:
+a)requiredDuringSchedulingIgnoredDuringExecution
+b)prefferedDuringSchedulingIgnoredDuringExecution
+
+Planned:
+a)requiredDuringSchedulingrequiredDuringExecution
 
