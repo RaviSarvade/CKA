@@ -120,3 +120,46 @@ In Taints & Tolerations there is chance that the desired pod might placed in ano
 in Node affinity another set of pods might get  placed in our desired Nodes
 So , we use combination of both to ensure specifc pod is placed in specific node
 
+===============================================================================================================================================================================================
+
+
+Resource Requirements & limitations:
+=====================================
+
+By default POD or POD/container requires 0.5 CPU 256 Mi - Resource req of a container
+By default k8s will limit the resources to container i.e, CPU - 1 , Memory - 512 Mi
+
+
+In Docker world , generally there is no limitations for a conatiner to consume on a node 
+
+
+CPU - 0.5 or 500m --> #you can go as lower as 1m i.e, 1milli
+1 CPU - 1 AWS vCPU
+incase of CPU, K8s throttles the cpu so it doesnot go beyond the specified limit
+incase of memory , it can uses more memory than its limit, pod will be terminated
+
+Memory - 1Gi or 256 Mi or Ki
+
+1 Gi= 1024 Mi
+1 Mi= 1024 Ki
+1Ki= 1024 bytes
+
+For the POD to pick up those defaults you must have first set those as default values for request and
+limit by creating a LimitRange in that namespace.
+
+Limit-Range:
+-----------
+
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: mem-limit-range
+spec:
+  limits:
+  - default:
+      memory: 512Mi
+    defaultRequest:
+      memory: 256Mi
+    type: Container
+    
+    ================================================================================================================================================================
