@@ -1,5 +1,13 @@
 apiVersion: v1
-kind: Namespace
+kind: Pod
 metadata: 
-  name: dev
-
+  name: nginx
+  labels:
+    app: nginx
+    tier: frontend
+spec:
+  containers:
+  - name: nginx
+    image: nginx
+  nodeSeclector:
+    size: Large
