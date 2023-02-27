@@ -183,10 +183,33 @@ how it schedules pod on each node
 it uses nodeName field to place pod on each node in a cluster. until k8s v1.12
 
 from v1.2 uses Node Affinity & Default Scheduler
+===========================================================================================================================================================================
+Static PODs:
+Kubelet can manage a node Independently in worker node with out master node
+
+you can config kubelet to read the pod def files in designation paths etc/kubernetes/manifests
+To config a deignation folder 
+update path details in --pod-manifest-path in kubelet.service
+
+instead of specifying path in service file you can provide path to config file in kubelet.service
+--config=kubeconfig.yaml
+
+
+in the kubeconfig.yaml mention path
+staticPOdPath: /etc/kubernetes/manifests
 
 
 
+it ensures pod is live, if any cahnegs made in pod def file of aove folder kubelet recreates a pod for those change so effect
 
+these pods which are created by kubectlet without intervention of kube-api or rest of the cluster components
 
+you can create only PODS but not replicasets/deployments
+
+kubeapi provides input as httpAPI endpoint to kubelet to create a pod in cluster
+kubele can create a static from pod defintion file in the given config path
+
+when kubelet creates a static pod  it will also create a mirror  object in kubeapi server - 
+if you exec the cmd ku get pods it will display a static pod as well which was created by kubelet i.e, a read only mirror of the static pod
 
 
