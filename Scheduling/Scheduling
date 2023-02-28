@@ -233,3 +233,13 @@ ku logs my-customer-scheduler -n kube-system
 
 
 
+Scheduling Profile:
+- pod will be scheduled based on priority
+scheduling queue-->  filtering-->   scoring--->       binding to a node 
+priorityClass     NodeResourcesFit  NodeResourcesFit  Default Binder
+                  NodeName          ImageLocality
+                  NodeUnschedulable
+
+=================================================================================================================================
+
+LOgging & Monitoring
