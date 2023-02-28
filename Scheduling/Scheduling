@@ -220,10 +220,15 @@ Use case:
 - place it in default designation config path
 - thats how kubeadm setup cluster
 
+===============================================================================================================================================================
 
+Multiple Schedulers:
+--------------------
 
+you can create your own scheduler & your own rules to place the pod in a Node
 
-
+ku get events -o wide
+ku logs my-customer-scheduler -n kube-system
 
 
 
