@@ -202,7 +202,7 @@ staticPOdPath: /etc/kubernetes/manifests
 
 it ensures pod is live, if any cahnegs made in pod def file of aove folder kubelet recreates a pod for those change so effect
 
-these pods which are created by kubectlet without intervention of kube-api or rest of the cluster components
+these pods which are created by kubelet without intervention of kube-api or rest of the cluster components
 
 you can create only PODS but not replicasets/deployments
 
@@ -211,5 +211,20 @@ kubele can create a static from pod defintion file in the given config path
 
 when kubelet creates a static pod  it will also create a mirror  object in kubeapi server - 
 if you exec the cmd ku get pods it will display a static pod as well which was created by kubelet i.e, a read only mirror of the static pod
+
+Use case:
+---------
+1) static pods are not dependednt on k8s control plane so you can use static pods to deploy control plane components as pod
+- install kubelet on all master Nodes
+- create po def files that use docker images of various control plane components
+- place it in default designation config path
+- thats how kubeadm setup cluster
+
+
+
+
+
+
+
 
 
