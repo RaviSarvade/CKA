@@ -10,3 +10,9 @@ K8s has no builtin feature monitoring solution
 
 kubelet agent contains cAdvisor --> responsible for receiving performance metrics from the pod & exposing them to kubelet api to make metrics available for metrics server
 #kubectl top node/pod
+
+
+Applications log monitoring
+==============================
+
+kubectl logs -f pod_name container_name
