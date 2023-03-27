@@ -1,0 +1,12 @@
+Monitoring K8s cluster
+===========================
+
+To monitor resource consumption at node level i.e, how many are healthy & performance metrics such as cpu, memory,disk & network utilization
+
+Pod level metrics:
+no of pods, cpu & memory
+
+K8s has no builtin feature monitoring solution
+
+kubelet agent contains cAdvisor --> responsible for receiving performance metrics from the pod & exposing them to kubelet api to make metrics available for metrics server
+#kubectl top node/pod
