@@ -84,15 +84,36 @@ ENTRYPOINT & CMD should be in json format
 to change entrypoint at runtime
 
 
+ENV:
+----
 
+env is an array so every item will start with "-" indicates an item in array
 
+each item has name value property
 
+ConfigMaps: used to pass configuration data in the form of key value pairs
 
+create config map & inject them into pod
 
+#ku create configmap name --from-literal=key1=value1 --from-literal=key2=value2 
+#ku create configmap name --from-file=app_config.properties
+=============================================================================
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+data:
+  APP_COLOR: blue
 
+#ku get cm
 
+in pod.spec--> inject env variable
 
-
-
-
+spec:
+  containers:
+    envFrom:
+      - configMapRef:
+            name: app-config
+            
+            
 
