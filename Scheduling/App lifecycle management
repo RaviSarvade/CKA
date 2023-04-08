@@ -39,6 +39,54 @@ rollback:
 
 #ku rollout undo deploy/deploy_name
 
+Command , Arguments & EntryPoint in Docker:
+-----------------------------------------------
+
+containers are not meant to host a OS, they are mainly used to run spec task/process
+such as to host a instance of webserver / DB / App server / to carry out some kind of computation or analysis
+
+Containers only runs as long as inside process is alive.
+
+if web service is stopped container exits.
+
+CMD: defines as it will run when container starts
+
+if you run
+
+#ubuntu-sleeper
+FROM Ubuntu
+CMD sleep 5
+
+#docker run ubuntu-sleeper --> containers start and exec sleep command for 5 sec
+
+#docker run ubuntu-sleeper sleep 10 --> containers start and exec sleep command for 10 sec
+
+================================================================================
+
+#ubuntu-entrypoint
+FROM Ubuntu
+ENTRYPOINT ["sleep"] ---> in pod.spec--> ref to command: ["sleep 2.0"]
+CMD ["5"] --> args: ["10"]
+
+bydefault CLI params would be sleep 5 but in below cmd in will get replaced with sleep 10 as it was mentioned at exec
+
+#docker run ubuntu-entrypoint 10 --> containers start and exec sleep command for 10 sec
+
+in CMD --> CLI params will get replaced entirely
+in Entrypoint--> CLI params will get appended
+
+in entrypoint if you dodnt mention params then we will get an error when exec in CLI as operand is not specified.
+so we use CMD & ENTRYPOINT for usage of default values if its not mentioned in CLI
+
+ENTRYPOINT & CMD should be in json format
+
+#docker run --entrypoint sleep2.0 ubuntu-entrypoint 10
+to change entrypoint at runtime
+
+
+
+
+
 
 
 
