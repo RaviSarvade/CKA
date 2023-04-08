@@ -31,6 +31,20 @@ if you dont specify a strategy while creating deployment it will assume as rolli
 
 #ku set image deploy/name nginx=nginx:1.1
 
+in rolling update strategy initially a deployment consists of a replicaset
+and when you are upgrading version of the app it will create a new replicaset and one by one delete the pod in old "rs" 
+and creates pod in new "rs".
+
+rollback:
+
+#ku rollout undo deploy/deploy_name
+
+
+
+
+
+
+
 
 
 
