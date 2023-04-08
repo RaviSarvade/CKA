@@ -1,0 +1,36 @@
+Deployment: updates and Rollback
+
+Rollout & versioning:
+
+When you first create a deploy, it triggers a rollout
+a new rollout creates a new deploy revision i.e, revision 1
+
+in future when application is upgraded container version is upgraded to a new one
+a new rollout deployed and new deploy revision is created i.e, revision 2
+
+this helps us to keep track of changes made on deployment & enables us to rollback to prev version of deploy if necessary
+
+
+#kubectl rollout status deploy/name
+
+#kubectl rollout history deploy/name ==> to see the revision & history of control
+
+Deployment Strategy:
+
+Recreate Strategy:
+
+Application will be down & new updated app pods will be created
+
+Rolling Update stategy: default deploy strategy
+
+we take older version down & bring newer version up one by one which requires no downtime
+
+if you dont specify a strategy while creating deployment it will assume as rolling update strategy
+
+#ku apply -f deploy.yaml
+
+#ku set image deploy/name nginx=nginx:1.1
+
+
+
+
