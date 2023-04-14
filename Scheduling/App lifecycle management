@@ -115,5 +115,15 @@ spec:
       - configMapRef:
             name: app-config
             
-            
-
+  
+  
+  
+  Secrets: it is used to store sensitive information in an encoded format
+  
+  #ku create secret generic --from-file=path_to_file
+  
+  create secret and inject in pod
+  
+  #echo -n "mysql" | base64
+  
+--> secrets are not encrypted only encoded
