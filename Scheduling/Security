@@ -1,0 +1,89 @@
+Security:
+---------
+
+Security Primitives:
+- For nodes Root passwords and password based authentication will be disabled
+- SSH key based authentication enabled
+
+kube-apiserver --> center of all operations & interacts with directly with kubectl utility or by accessing API directly
+who can access API server? defined by Authentication mechanisms
+Files- username & passwords
+Files-username and Tokens
+certificates
+External Authentication providers - LDAP
+service Accounts
+what they can do?
+RBAC Authorization - users are assigned to groups with specific permissions
+ABAC Authorization
+Node Authorization
+Webhook Mode
+
+All communication between the components in cluster such as ETCD and kubeapi , controller, scheduler and worker node components kubeler, kubeproxy is secured using TLS encryption.
+
+By default all pods can access other pods within the cluster & you can restict access between them using Network poilicies
+
+==========================================================================================================================================================
+
+Authentication in K8s Cluster:
+------------------------------
+
+Admins - that performs Administrative tasks
+Dev- Access cluster to test and deploy applications
+Bots or Service Accounts - that requires access to the clsuter 
+
+End Users - who have access to app deployed on the cluster
+Security of the EndUsers deployed on the cluster is managed by app itself internally
+
+
+Third party app - Accessing the cluster for integration purposes
+
+Secure our cluster by securing internal communcations between the internal components and s
+securing management access to cluster through authentication and authorization Mechanisms
+ACCOUNTS:
+-----------
+K8s doesnt manage user accounts natively  , it relies on a external source
+like below
+
+Files- username & passwords
+Files-username and Tokens
+certificates
+External Authentication providers - LDAP (third party identity service)
+
+You can create & manage service ccounts but not user accounts
+#ku create serviceaccount Ra1
+#ku get serviceaccount
+
+- All user access is manged by kube-apiserve in the cluster i.e, it 1)authenticates the user 2)before processing the request
+
+diff auth mechanisms:
+-static Password file (--basic-auth-file=user-details.csv) add this path in kube-apiserver.service and restart the API server to reflect
+if you set up using kubeadm tool you can update command (--basic-auth-file=user-details.csv) in kube-apiserver.yaml pod def file, kubeadmtool will resatrt api server automatically
+- To auth basic credentials while accessing kube-apiserver specify username & pwd in curl cmd
+#curl -v -k https://master-node-ip:6443/api/v1/pods -u "user1:password1"
+
+-StaticToken File (--token-auth-file=user-token-details.csv) - pass his file as option to api server
+#curl -v -k https://master-node-ip:6443/api/v1/pods --header "Authorization: Bearer token_name"
+
+• using these  files are not a recommended authentication mechanism
+• Consider volume mount while providing the auth file in a kubeadm setup
+• Setup Role Based Authorization for the new users
+
+certificates:
+-------------
+-its used to guarantee atrust between two parties during a transcation
+TLS certificates ensures that communication between user and the server is encrypted.
+
+Example Scenario:
+
+Without security if user access banking app that credentials he types in will be sent in plain text format and hacker can retreive it by sniffing the N/w traffic
+
+
+
+
+
+3rd party id like LDAP & kerberos
+
+
+
+
+
